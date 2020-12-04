@@ -1,82 +1,188 @@
-class Musician:
-  musician_list = []
-  def __init__(self, name='none'):
-    self.name = name
-    Musician.musician_list.append(self)
-          
-      
-  def __str__(self):
-    return(f'{self.name}')
-        
-  def __repr__(self):
-    return(f'{self.name}')
-        
-        
-  def to_list(cls):
-    return cls.musician_list
-    
-class Band(Musician):
-  list_of_band = []
-  
-  def __init__(self, band_name, members):
-    self.band_name = band_name 
-    self.members = members
-    Band.list_of_band.append(self.band_name)
-    
-    
-  def __str__(self):
-    return(f'{self.band_name} coldplay')
-    
-  def __repr__(self):
-    return(f'{self.band_name} coldplay')
-  
-  def play_solos(self):
-    for member in self.members:
-      member.play_solo()
-        
-  @classmethod
-  def to_list(cls):
-    print(cls.list_of_band)
-    return cls.list_of_band #this should print
-      
-class Guitarist(Musician):
-          
-  def get_instrument(self):
-    return 'guitar'
-       
-  def play_solo(self):
-    print('whammy bar champion')
-    return 'whammy bar champion'
+import pytest
 
-class Bassist(Musician):
-  
-  def get_instrument(self):
-    return 'bass'
-  
-  def play_solo(self):
-    print('drop that bass')
-    return 'drop that base'
+# import yaml
 
-class Drummer(Musician):
-  
-        
-  def get_instrument(self):
-    return 'drums'
-      
-  def play_solo(self):
-    return 'rocking out'
+from pythonic_garage_band.band import Band, Musician, Guitarist, Bassist, Drummer
 
-# coldplay = Band('coldplay', ['johnny', 'chris', 'leroy', 'jason', 'hank'])
-# leroy = Drummer
-johnny = Guitarist('johnny')
-jason = Bassist('jason')
-# print(johnny.get_instrument())
-# print(johnny.play_solo())
-coldplay = Band('coldplay', [johnny, jason])
-coldplay.play_solos()
-# print(coldplay(str))
-# print(coldplay(repr))
-# mcr = Band('mcr', ['jerad', 'mikey','ray', 'frank']) 
-# coldplay.to_list()
-# mcr.to_list()
+
+def test_band_name():
+    nirvana = Band("Nirvana", [])
+
+    assert nirvana.name == "Nirvana"
+
+
+def test_band_str():
+    nirvana = Band("Nirvana", [])
+    actual = str(nirvana)
+    expected = "The band Nirvana"
+    assert actual == expected
+
+
+def test_band_repr():
+    nirvana = Band("Nirvana", [])
+    actual = repr(nirvana)
+    expected = "Band instance. name=Nirvana, members=[]"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_guitarist_str():
+    joan = Guitarist("Joan Jett")
+    actual = str(joan)
+    expected = "My name is Joan Jett and I play guitar"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_guitarist_repr():
+    joan = Guitarist("Joan Jett")
+    actual = repr(joan)
+    expected = "Guitarist instance. Name = Joan Jett"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_drummer_str():
+    sheila = Drummer("Sheila E.")
+    actual = str(sheila)
+    expected = "My name is Sheila E. and I play drums"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_drummer_repr():
+    sheila = Drummer("Sheila E.")
+    actual = repr(sheila)
+    expected = "Drummer instance. Name = Sheila E."
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_bassist_str():
+    meshell = Bassist("Meshell Ndegeocello")
+    actual = str(meshell)
+    expected = "My name is Meshell Ndegeocello and I play bass"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_bassist_repr():
+    meshell = Bassist("Meshell Ndegeocello")
+    actual = repr(meshell)
+    expected = "Bassist instance. Name = Meshell Ndegeocello"
+    assert actual == expected
+
+
+# @pytest.mark.skip("pending")
+def test_guitarist():
+    jimi = Guitarist("Jimi Hendrix")
+    assert jimi.name == "Jimi Hendrix"
+    assert jimi.get_instrument() == "guitar"
+
+
+# @pytest.mark.skip("pending")
+def test_bassist():
+    flea = Bassist("Flea")
+    assert flea.name == "Flea"
+    assert flea.get_instrument() == "bass"
+
+
+# @pytest.mark.skip("pending")
+def test_drummer():
+    ginger = Drummer("Ginger Baker")
+    assert ginger.name == "Ginger Baker"
+    assert ginger.get_instrument() == "drums"
+
+
+# @pytest.mark.skip("pending")
+def test_instruments(one_band):
+    instruments = ["guitar", "bass", "drums"]
+    for i, member in enumerate(one_band.members):
+        # NOTE: see stretch goal where zip used
+        assert member.get_instrument() == instruments[i]
+
+
+# @pytest.mark.skip("pending")
+def test_individual_solos(one_band):
+    for member in one_band.members:
+        if member.get_instrument() == "guitar":
+            assert member.play_solo() == "face melting guitar solo"
+        elif member.get_instrument() == "bass":
+            assert member.play_solo() == "bom bom buh bom"
+        elif member.get_instrument() == "drums":
+            assert member.play_solo() == "rattle boom crash"
+
+
+# @pytest.mark.skip("pending")
+def test_band_members(one_band):
+
+    assert len(one_band.members) == 3
+
+    assert isinstance(one_band.members[0], Musician)
+    assert isinstance(one_band.members[0], Guitarist)
+    assert one_band.members[0].name == "Kurt Cobain"
+
+    assert isinstance(one_band.members[1], Musician)
+    assert isinstance(one_band.members[1], Bassist)
+    assert one_band.members[1].name == "Krist Novoselic"
+
+    assert isinstance(one_band.members[2], Musician)
+    assert isinstance(one_band.members[2], Drummer)
+    assert one_band.members[2].name == "Dave Grohl"
+
+
+# @pytest.mark.skip("pending")
+def test_play_solos_for_whole_band(one_band):
+    solos = one_band.play_solos()
+    assert len(solos) == 3
+    assert solos[0] == "face melting guitar solo"
+    assert solos[1] == "bom bom buh bom"
+    assert solos[2] == "rattle boom crash"
+
+
+# @pytest.mark.skip("pending")
+def test_to_list():
+    assert Band.to_list() == []
+    Band("The Nobodies", [])
+    assert len(Band.to_list()) == 1
+
+
+#######################
+# Fixtures
+#######################
+
+
+@pytest.fixture
+def nirvana_data():
+    return {
+        "name": "Nirvana",
+        "members": [
+            {"name": "Kurt Cobain", "instrument": "Guitar"},
+            {"name": "Krist Novoselic", "instrument": "Bass"},
+            {"name": "Dave Grohl", "instrument": "Drums"},
+        ],
+    }
+
+
+@pytest.fixture
+def one_band():
+    some_band = Band(
+        "Nirvana",
+        [
+            Guitarist("Kurt Cobain"),
+            Bassist("Krist Novoselic"),
+            Drummer("Dave Grohl"),
+        ],
+    )
+    return some_band
+
+
+@pytest.fixture(autouse=True)
+def clean():
+    """runs before each test automatically
+    There's also a more advanced way to run code after each test as well
+    Check the docs for that. Hint: it uses yield
+    """
+    Band.instances = []
+    Band.list = []
 
